@@ -1,0 +1,52 @@
+<div class="min-vh-100 d-flex flex-column bg-light">
+  <!-- Header del chat -->
+  <div class="bg-primary text-white py-3 px-3 d-flex align-items-center">
+    <img [src]="chat().avatar" alt="Avatar" class="rounded-circle me-2" width="40" height="40" />
+    <div class="flex-grow-1">
+      <h6 class="mb-0 fw-bold">{{ chat().nombre }}</h6>
+      <small class="text-white-50">En línea</small>
+    </div>
+    <button class="btn btn-outline-light btn-sm rounded-pill" (click)="volver()">Volver</button>
+  </div>
+
+  <!-- Mensajes -->
+  <div
+    class="flex-grow-1 px-3 py-3 overflow-auto"
+    style="background-color: #f8f9fa"
+  >
+<ng-container *for="let mensaje of mensajes()">
+      <div
+        class="mb-2 d-flex"
+        [class.justify-content-end]="mensaje.propio"
+        [class.justify-content-start]="!mensaje.propio"
+      >
+        <div
+          class="p-2 rounded-pill"
+          [class.bg-primary]="mensaje.propio"
+          [class.text-white]="mensaje.propio"
+          [class.bg-white]="!mensaje.propio"
+          [class.text-dark]="!mensaje.propio"
+          [class.border]="!mensaje.propio"
+          style="max-width: 75%"
+        >
+          <small>{{ mensaje.texto }}</small>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- Input de mensaje -->
+  <div class="p-3 border-top bg-white d-flex align-items-center">
+    <input
+      type="text"
+      class="form-control rounded-pill me-2"
+      placeholder="Escribe un mensaje..."
+      [value]="nuevoMensaje()"
+      (input)="nuevoMensaje.set($any($event.target).value)"
+      (keyup.enter)="enviarMensaje()"
+    />
+    <button class="btn btn-primary rounded-pill px-4" (click)="enviarMensaje()">
+      Enviar
+    </button>
+  </div>
+</div>

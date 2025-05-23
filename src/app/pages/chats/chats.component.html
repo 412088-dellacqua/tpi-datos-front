@@ -1,0 +1,25 @@
+<div class="min-vh-100 d-flex flex-column bg-light">
+  <!-- Header -->
+  <div class="bg-primary text-white py-3 px-4 d-flex align-items-center justify-content-between">
+    <h5 class="mb-0 fw-bold">Chatuser</h5>
+    <button class="btn btn-outline-light btn-sm rounded-pill">Cerrar sesión</button>
+  </div>
+
+  <!-- Lista de chats -->
+  <div class="flex-grow-1 overflow-auto px-2 py-3">
+    @for (chat of chats; track chat.id) {
+      <div class="card mb-2 shadow-sm border-0 rounded-4 chat-item" (click)="abrirChat(chat.id)">
+        <div class="d-flex align-items-center p-3">
+          <img [src]="chat.avatar" alt="Avatar" class="rounded-circle me-3" width="48" height="48" />
+          <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0 fw-semibold">{{ chat.nombre }}</h6>
+              <small class="text-muted">{{ chat.hora }}</small>
+            </div>
+            <p class="mb-0 text-muted text-truncate" style="max-width: 230px">{{ chat.ultimoMensaje }}</p>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>
