@@ -18,6 +18,7 @@ export class ChatsComponent {
   chats: any[] = [];
   socket: Socket;   // 👈 declarar la variable socket
   userId: string = '';
+  nombreUsuario?: string;
 
   constructor(private router: Router, private chatService: ChatService) {
     this.socket = io('http://localhost:3000');  // 👈 conectar con el servidor Socket.IO
@@ -26,7 +27,8 @@ export class ChatsComponent {
   ngOnInit(): void {
     const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
     this.userId = usuario._id;
-    
+    this.nombreUsuario = usuario.username
+
     this.cargarChats();
 
     // Escuchar evento 'nuevo-chat'
@@ -35,15 +37,9 @@ export class ChatsComponent {
       // Solo agregar el chat si el usuario está en la lista del chat
       if (chat.users.includes(this.userId)) {
         // Preparar la estructura para mostrar
-        const otro = chat.users.find((u: any) => u._id !== this.userId) || {};
-        const chatFormateado = {
-          id: chat._id,
-          nombre: otro.username || 'Desconocido',
-          avatar: otro.avatar || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-          hora: chat.lastMessage?.timestamp ? new Date(chat.lastMessage.timestamp).toLocaleTimeString() : '',
-          ultimoMensaje: chat.lastMessage?.text || 'Sin mensajes aún'
-        };
-        this.chats.push(chatFormateado);
+        const otro = chat.users.find((u: string) => u !== this.userId);
+        this.buscarUsuario(otro);
+      
       }
     });
   }
@@ -76,4 +72,24 @@ export class ChatsComponent {
     localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
   }
+
+  buscarUsuario(id: string): any {
+  this.chatService.getUsuarioPorId(id).subscribe({
+    next: (usuario) => {
+      console.log(usuario);
+        const chatFormateado = {
+          id: usuario._id,
+          nombre: usuario.username || 'Desconocido',
+          avatar: usuario.avatar || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+          hora: usuario.lastMessage?.timestamp ? new Date(usuario.lastMessage.timestamp).toLocaleTimeString() : '',
+          ultimoMensaje: usuario.lastMessage?.text || 'Sin mensajes aún'
+        };
+        this.chats.push(chatFormateado);
+    },
+    error: (err) => {
+      console.error('Error al buscar usuario:', err);
+    }
+  });
+}
+
 }

@@ -1,8 +1,9 @@
-import { Component, signal, inject } from '@angular/core';
+import { Component, signal, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 import { HttpClientModule } from '@angular/common/http';
+import { io, Socket } from 'socket.io-client';
 
 interface Chat {
   _id: string;
@@ -30,34 +31,47 @@ interface Mensaje {
   providers: [ChatService],
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
+export class ChatComponent implements OnDestroy {
   private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
 
-  // Aquí debes colocar el id del usuario actual (puede venir de tu auth o sesión)
-  usuarioActualId = 'TU_ID_DE_USUARIO_AQUI';
+  private socket: Socket = io('http://localhost:3000'); // Cambiá al puerto real de tu backend
+  usuarioActualId!: string;
 
   chat = signal<Chat | null>(null);
   mensajes = signal<Mensaje[]>([]);
   nuevoMensaje = signal('');
 
+  constructor(private router: Router) {}
+
   ngOnInit(): void {
     const chatId = this.route.snapshot.paramMap.get('chatId');
+
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    this.usuarioActualId = usuario._id;
+
     if (chatId) {
       this.cargarChat(chatId);
       this.cargarMensajes(chatId);
+
+      // Socket: escuchar nuevos mensajes
+      this.socket.on('nuevo-mensaje', (mensaje: Mensaje) => {
+        if (mensaje.chatId === chatId) {
+          this.mensajes.update(msgs => [...msgs, mensaje]);
+        }
+      });
     }
   }
 
   cargarChat(chatId: string) {
     this.chatService.getChat(chatId).subscribe(chatData => {
-      console.log(chatData),
       this.chat.set(chatData);
     });
   }
 
   cargarMensajes(chatId: string) {
     this.chatService.getMessages(chatId).subscribe(msgs => {
+      this.usuarioActualId = JSON.parse(localStorage.getItem('usuario') || '{}')._id;
       this.mensajes.set(msgs);
     });
   }
@@ -66,25 +80,24 @@ export class ChatComponent {
     const texto = this.nuevoMensaje();
     if (texto.trim().length === 0) return;
 
-    const chatId = this.route.snapshot.paramMap.get('id');
+    const chatId = this.route.snapshot.paramMap.get('chatId');
     if (!chatId) return;
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
 
-    this.chatService.sendMessage(chatId, texto).subscribe(nuevoMsg => {
-      this.mensajes.update(msgs => [...msgs, nuevoMsg]);
-      this.nuevoMensaje.set('');
-    });
+    this.chatService.sendMessage(chatId, texto, usuario._id).subscribe();
+    this.nuevoMensaje.set('');
   }
 
   volver() {
-    // Aquí puedes usar el router para volver, si tienes router inyectado
-    // Ejemplo:
-    // this.router.navigate(['/chats']);
+    this.router.navigate(['/chats']);
   }
 
   getNombresUsuarios(): string {
     const c = this.chat();
     if (!c) return '';
-    return c.users.map(u => u.username).join(', ');
+    const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
+    const usuarioLogeado = c.users.filter(x => x.username != usuario.username);
+    return usuarioLogeado[0].username;
   }
 
   getAvatar(): string {
@@ -95,4 +108,7 @@ export class ChatComponent {
     return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
   }
 
+  ngOnDestroy(): void {
+    this.socket.disconnect();
+  }
 }

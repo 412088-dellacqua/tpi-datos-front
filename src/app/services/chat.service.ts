@@ -27,7 +27,7 @@ interface Mensaje {
 export class ChatService {
   private apiUrl = 'http://localhost:3000/api/'; // Ajustá el puerto y path si es necesario
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getChatsByUser(userId: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl + "chats"}/${userId}`);
@@ -36,17 +36,26 @@ export class ChatService {
 
   // Obtener un chat específico por ID
   getChat(chatId: string): Observable<Chat> {
-    return this.http.get<Chat>(`${this.apiUrl}/chats/${chatId}`);
+    console.log(chatId)
+    return this.http.get<Chat>(`${this.apiUrl}chats/chat/${chatId}`);
   }
 
   // Obtener los mensajes de un chat
   getMessages(chatId: string): Observable<Mensaje[]> {
-    return this.http.get<Mensaje[]>(`${this.apiUrl}/chats/${chatId}/messages`);
+    return this.http.get<Mensaje[]>(`${this.apiUrl}messages/${chatId}`);
   }
 
-  // Enviar un mensaje nuevo al chat
-  sendMessage(chatId: string, text: string): Observable<Mensaje> {
-    return this.http.post<Mensaje>(`${this.apiUrl}/chats/${chatId}/messages`, { text });
+  sendMessage(chatId: string, text: string, sender: string): Observable<Mensaje> {
+    return this.http.post<Mensaje>(`${this.apiUrl}messages`, {
+      chatId,
+      sender,
+      text
+    });
   }
-  
+
+
+  getUsuarioPorId(id: string) {
+    return this.http.get<any>(`http://localhost:3000/api/users/${id}`);
+  }
+
 }
