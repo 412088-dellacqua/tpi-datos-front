@@ -4,22 +4,22 @@ import {
   BrowserModule,
   EVENT_MANAGER_PLUGINS,
   EventManagerPlugin
-} from "./chunk-CKZVDPFU.js";
+} from "./chunk-K5VYTSLK.js";
 import {
   HTTP_ROOT_INTERCEPTOR_FNS
-} from "./chunk-HX2TAPNQ.js";
+} from "./chunk-ZQUAIHZL.js";
 import {
   NullViewportScroller,
   PlatformLocation,
   ViewportScroller,
   getDOM,
   setRootDomAdapter
-} from "./chunk-R5OQVGL2.js";
+} from "./chunk-RHXYYQXL.js";
 import {
   DOCUMENT,
   PLATFORM_SERVER_ID,
   XhrFactory
-} from "./chunk-WPWKC7YC.js";
+} from "./chunk-ETENGKGF.js";
 import {
   ALLOW_MULTIPLE_PLATFORMS,
   APP_ID,
@@ -54,11 +54,11 @@ import {
   ɵɵdefineInjector,
   ɵɵdefineNgModule,
   ɵɵinject
-} from "./chunk-IWB6H4UU.js";
+} from "./chunk-OMDKWFG3.js";
 import {
   __async,
   __toESM
-} from "./chunk-YHCV7DAQ.js";
+} from "./chunk-ANGF2IQY.js";
 
 // node_modules/@angular/platform-server/fesm2022/server-_br4z1cG.mjs
 var import_rxjs = __toESM(require_cjs(), 1);
@@ -16257,7 +16257,7 @@ var ServerXhr = class _ServerXhr {
       if (!this.xhrImpl) {
         const {
           default: xhr
-        } = yield import("./xhr2-TXIMV6CV.js");
+        } = yield import("./xhr2-HQX5CY5B.js");
         this.xhrImpl = xhr;
       }
     });
@@ -16838,4 +16838,4 @@ export {
    * License: MIT
    *)
 */
-//# sourceMappingURL=chunk-PZT2ATAV.js.map
+//# sourceMappingURL=chunk-PDBQ36BB.js.map
