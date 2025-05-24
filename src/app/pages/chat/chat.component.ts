@@ -1,47 +1,98 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Mensaje {
-  texto: string;
-  propio: boolean;
-}
+import { ActivatedRoute } from '@angular/router';
+import { ChatService } from '../../services/chat.service';
+import { HttpClientModule } from '@angular/common/http';
 
 interface Chat {
-  nombre: string;
-  avatar: string;
+  _id: string;
+  users: Array<{ _id: string; username: string; avatar?: string }>;
+  lastMessage?: {
+    text: string;
+    sender: { _id: string; username: string };
+    timestamp: string;
+  };
 }
+
+interface Mensaje {
+  _id: string;
+  chatId: string;
+  sender: { _id: string; username: string };
+  text: string;
+  timestamp: string;
+}
+
 @Component({
   selector: 'app-chat',
-  imports: [CommonModule],
+  standalone: true,
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+  providers: [ChatService],
+  styleUrls: ['./chat.component.scss']
 })
 export class ChatComponent {
-  chat = signal<Chat>({
-    nombre: 'María López',
-    avatar: 'https://i.pravatar.cc/300?img=5'
-  });
+  private route = inject(ActivatedRoute);
+  private chatService = inject(ChatService);
 
-  mensajes = signal<Mensaje[]>([
-    { texto: 'Hola, ¿cómo estás?', propio: false },
-    { texto: 'Todo bien, ¿vos?', propio: true },
-    { texto: 'Re bien, gracias por preguntar 😊', propio: false },
-    { texto: '¡Qué bueno! ¿Vamos al cine hoy?', propio: true },
-    { texto: '¡Dale!', propio: false }
-  ]);
+  // Aquí debes colocar el id del usuario actual (puede venir de tu auth o sesión)
+  usuarioActualId = 'TU_ID_DE_USUARIO_AQUI';
 
+  chat = signal<Chat | null>(null);
+  mensajes = signal<Mensaje[]>([]);
   nuevoMensaje = signal('');
+
+  ngOnInit(): void {
+    const chatId = this.route.snapshot.paramMap.get('chatId');
+    if (chatId) {
+      this.cargarChat(chatId);
+      this.cargarMensajes(chatId);
+    }
+  }
+
+  cargarChat(chatId: string) {
+    this.chatService.getChat(chatId).subscribe(chatData => {
+      console.log(chatData),
+      this.chat.set(chatData);
+    });
+  }
+
+  cargarMensajes(chatId: string) {
+    this.chatService.getMessages(chatId).subscribe(msgs => {
+      this.mensajes.set(msgs);
+    });
+  }
 
   enviarMensaje() {
     const texto = this.nuevoMensaje();
     if (texto.trim().length === 0) return;
 
-    this.mensajes.update((msgs) => [...msgs, { texto, propio: true }]);
-    this.nuevoMensaje.set('');
+    const chatId = this.route.snapshot.paramMap.get('id');
+    if (!chatId) return;
+
+    this.chatService.sendMessage(chatId, texto).subscribe(nuevoMsg => {
+      this.mensajes.update(msgs => [...msgs, nuevoMsg]);
+      this.nuevoMensaje.set('');
+    });
   }
 
   volver() {
-    // Aquí podés poner la lógica para volver a la lista de chats
-    console.log('Volviendo a la lista de chats');
+    // Aquí puedes usar el router para volver, si tienes router inyectado
+    // Ejemplo:
+    // this.router.navigate(['/chats']);
   }
+
+  getNombresUsuarios(): string {
+    const c = this.chat();
+    if (!c) return '';
+    return c.users.map(u => u.username).join(', ');
+  }
+
+  getAvatar(): string {
+    const c = this.chat();
+    if (c && c.users && c.users.length > 0) {
+      return c.users[0].avatar || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+    }
+    return 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';
+  }
+
 }

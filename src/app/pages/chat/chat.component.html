@@ -1,12 +1,23 @@
 <div class="min-vh-100 d-flex flex-column bg-light">
   <!-- Header del chat -->
   <div class="bg-primary text-white py-3 px-3 d-flex align-items-center">
-    <img [src]="chat().avatar" alt="Avatar" class="rounded-circle me-2" width="40" height="40" />
+      <img
+        [src]="getAvatar()"
+        alt="Avatar"
+        class="rounded-circle me-2"
+        width="40"
+        height="40"
+      />
+
     <div class="flex-grow-1">
-      <h6 class="mb-0 fw-bold">{{ chat().nombre }}</h6>
+      <h6 class="mb-0 fw-bold">
+        {{ getNombresUsuarios() }}
+      </h6>
       <small class="text-white-50">En línea</small>
     </div>
-    <button class="btn btn-outline-light btn-sm rounded-pill" (click)="volver()">Volver</button>
+    <button class="btn btn-outline-light btn-sm rounded-pill" (click)="volver()">
+      Volver
+    </button>
   </div>
 
   <!-- Mensajes -->
@@ -14,22 +25,22 @@
     class="flex-grow-1 px-3 py-3 overflow-auto"
     style="background-color: #f8f9fa"
   >
-<ng-container *for="let mensaje of mensajes()">
+    <ng-container *ngFor="let mensaje of mensajes()">
       <div
         class="mb-2 d-flex"
-        [class.justify-content-end]="mensaje.propio"
-        [class.justify-content-start]="!mensaje.propio"
+        [class.justify-content-end]="mensaje.sender._id === usuarioActualId"
+        [class.justify-content-start]="mensaje.sender._id !== usuarioActualId"
       >
         <div
           class="p-2 rounded-pill"
-          [class.bg-primary]="mensaje.propio"
-          [class.text-white]="mensaje.propio"
-          [class.bg-white]="!mensaje.propio"
-          [class.text-dark]="!mensaje.propio"
-          [class.border]="!mensaje.propio"
+          [class.bg-primary]="mensaje.sender._id === usuarioActualId"
+          [class.text-white]="mensaje.sender._id === usuarioActualId"
+          [class.bg-white]="mensaje.sender._id !== usuarioActualId"
+          [class.text-dark]="mensaje.sender._id !== usuarioActualId"
+          [class.border]="mensaje.sender._id !== usuarioActualId"
           style="max-width: 75%"
         >
-          <small>{{ mensaje.texto }}</small>
+          <small>{{ mensaje.text }}</small>
         </div>
       </div>
     </ng-container>
