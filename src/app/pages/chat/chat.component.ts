@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 import { HttpClientModule } from '@angular/common/http';
 import { io, Socket } from 'socket.io-client';
+import { AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { effect } from '@angular/core';
 
 interface Chat {
   _id: string;
@@ -31,9 +33,11 @@ interface Mensaje {
   providers: [ChatService],
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent implements OnDestroy {
+export class ChatComponent implements OnDestroy, AfterViewInit  {
   private route = inject(ActivatedRoute);
   private chatService = inject(ChatService);
+
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
   private socket: Socket = io('http://localhost:3000'); // Cambiá al puerto real de tu backend
   usuarioActualId!: string;
@@ -43,6 +47,7 @@ export class ChatComponent implements OnDestroy {
   nuevoMensaje = signal('');
 
   constructor(private router: Router) {}
+
 
   ngOnInit(): void {
     const chatId = this.route.snapshot.paramMap.get('chatId');
@@ -63,6 +68,28 @@ export class ChatComponent implements OnDestroy {
     }
   }
 
+
+  ngAfterViewInit(): void {
+    effect(() => {
+      const mensajesActuales = this.mensajes();
+      if (mensajesActuales.length > 0) {
+        setTimeout(() => {
+          this.scrollToLastChild();
+        }, 100);
+      }
+    });
+  }
+
+  scrollToLastChild(): void {
+    const container: HTMLElement = this.scrollContainer.nativeElement;
+    const hijos = container.children;
+
+    if (hijos.length > 0) {
+      const ultimoElemento = hijos[hijos.length - 1] as HTMLElement;
+      ultimoElemento.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
+
   cargarChat(chatId: string) {
     this.chatService.getChat(chatId).subscribe(chatData => {
       this.chat.set(chatData);
@@ -73,6 +100,7 @@ export class ChatComponent implements OnDestroy {
     this.chatService.getMessages(chatId).subscribe(msgs => {
       this.usuarioActualId = JSON.parse(localStorage.getItem('usuario') || '{}')._id;
       this.mensajes.set(msgs);
+       setTimeout(() => this.scrollToLastChild(), 150);
     });
   }
 

@@ -7,7 +7,7 @@
   </div>
 
   <!-- Lista de chats -->
-  <div class="flex-grow-1 overflow-auto px-2 py-3">
+  <div class="flex-grow-1 overflow-auto px-2 py-3 contenedor">
     @for (chat of chats; track chat.id) {
       <div class="card mb-2 shadow-sm border-0 rounded-4 chat-item" (click)="abrirChat(chat.id)">
         <div class="d-flex align-items-center p-3">
