@@ -36,7 +36,6 @@ export class ChatService {
 
   // Obtener un chat específico por ID
   getChat(chatId: string): Observable<Chat> {
-    console.log(chatId)
     return this.http.get<Chat>(`${this.apiUrl}chats/chat/${chatId}`);
   }
 

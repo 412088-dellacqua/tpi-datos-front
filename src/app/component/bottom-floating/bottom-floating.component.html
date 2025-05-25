@@ -1,0 +1,44 @@
+<!-- Botón flotante -->
+<button class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 shadow"
+    style="width: 60px; height: 60px; font-size: 24px;" (click)="openModal()">
+    +
+</button>
+
+<!-- Modal -->
+<div class="modal fade show d-block" tabindex="-1" *ngIf="showPopup" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content shadow-lg">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar contacto</h5>
+                <button type="button" class="btn-close" aria-label="Close" (click)="closeModal()"></button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control mb-3" placeholder="Buscar contacto..." [(ngModel)]="busqueda" />
+
+                <!-- Resultados -->
+                <div *ngIf="resultados.length > 0">
+                    <div *ngFor="let usuario of resultados" class="card mb-2" (click)="crearChat(usuario._id)"
+                        style="cursor: pointer;">
+                        <div class="card-body d-flex align-items-center">
+                            <div class="me-3">
+                                <img src="https://cdn-icons-png.flaticon.com/512/766/766026.png" width="40" class="rounded-circle" alt="avatar">
+                            </div>
+                            <div>
+                                <h6 class="card-title mb-0">{{ usuario.username }}</h6>
+                                <small class="text-muted">{{ usuario.email }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div *ngIf="resultados.length === 0 && buscado" class="text-muted">
+                    No se encontraron usuarios.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="buscar()">Buscar</button>
+            </div>
+        </div>
+    </div>
+</div>

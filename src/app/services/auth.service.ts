@@ -15,7 +15,6 @@ export class AuthService {
   registrar(nuevoUsuario: any): void {
     this.http.post(`${this.apiUrl}`, nuevoUsuario).subscribe({
       next: (res) => {
-        console.log('Usuario registrado', res);
         Swal.fire({
           icon: 'success',
           title: '¡Registro exitoso!',

@@ -1,6 +1,7 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,7 +17,7 @@ export class RegisterComponent {
   password = '';
   confirmPassword = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private router: Router) {}
 
   registrarse() {
     if (this.password !== this.confirmPassword) {
@@ -37,12 +38,15 @@ export class RegisterComponent {
     this.http.post('http://localhost:3000/api/users', nuevoUsuario)
       .subscribe({
         next: (res) => {
-          console.log('Usuario registrado', res);
+          localStorage.setItem('usuario', JSON.stringify(res));
+
           Swal.fire({
             icon: 'success',
-            title: '¡Registro exitoso!',
-            text: 'Ya podés iniciar sesión',
-            confirmButtonText: 'OK'
+            title: '¡Login exitoso!',
+            showConfirmButton: false,
+            timer: 1500
+          }).then(() => {
+            this.router.navigate(['/chats']);
           });
         },
         error: (err) => {

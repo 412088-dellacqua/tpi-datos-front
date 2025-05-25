@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 
 import { io, Socket } from 'socket.io-client';  // 👈 Importar socket.io-client
+import { BottomFloatingComponent } from '../../component/bottom-floating/bottom-floating.component';
 
 @Component({
   selector: 'app-chats',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, BottomFloatingComponent],
   templateUrl: './chats.component.html',
   styleUrls: ['./chats.component.scss'],
   providers: [ChatService]
@@ -33,12 +34,11 @@ export class ChatsComponent {
 
     // Escuchar evento 'nuevo-chat'
     this.socket.on('nuevo-chat', (chat: any) => {
-      console.log('Nuevo chat recibido por socket:', chat); // 👈 AGREGÁ ESTO
       // Solo agregar el chat si el usuario está en la lista del chat
       if (chat.users.includes(this.userId)) {
         // Preparar la estructura para mostrar
         const otro = chat.users.find((u: string) => u !== this.userId);
-        this.buscarUsuario(otro);
+        this.buscarUsuario(otro, chat);
       
       }
     });
@@ -73,16 +73,15 @@ export class ChatsComponent {
     this.router.navigate(['/login']);
   }
 
-  buscarUsuario(id: string): any {
+  buscarUsuario(id: string, chat: any): any {
   this.chatService.getUsuarioPorId(id).subscribe({
     next: (usuario) => {
-      console.log(usuario);
         const chatFormateado = {
-          id: usuario._id,
+          id: chat._id,
           nombre: usuario.username || 'Desconocido',
           avatar: usuario.avatar || 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-          hora: usuario.lastMessage?.timestamp ? new Date(usuario.lastMessage.timestamp).toLocaleTimeString() : '',
-          ultimoMensaje: usuario.lastMessage?.text || 'Sin mensajes aún'
+          hora: chat.lastMessage?.timestamp ? new Date(chat.lastMessage.timestamp).toLocaleTimeString() : '',
+          ultimoMensaje: chat.lastMessage?.text || 'Sin mensajes aún'
         };
         this.chats.push(chatFormateado);
     },
