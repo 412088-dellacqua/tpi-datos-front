@@ -4,3 +4,26 @@
   color: white !important;
   border-radius: 0.25rem;
 }
+
+.chart-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.chart-title.blue {
+  color: #367ee7;  // azul
+}
+
+.chart-title.orange {
+  color: #ff9f40;  // naranja
+}
+
+.chart-title.green {
+  color: #4bc0c0;  // verde
+}
+
+.chart-canvas {
+  max-height: 500px;
+  margin-bottom: 40px;
+  display: block;
+}

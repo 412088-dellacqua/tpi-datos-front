@@ -40,23 +40,26 @@
                 <!-- Dashboard -->
                 <div *ngSwitchCase="'dashboard'">
                     <div class="alert alert-primary">Bienvenido al dashboard administrativo.</div>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title">Usuarios activos</h5>
-                                    <p class="card-text">125</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card shadow-sm">
-                                <div class="card-body">
-                                    <h5 class="card-title">Mensajes del día</h5>
-                                    <p class="card-text">893</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div *ngIf="vistaActual === 'dashboard'">
+
+                        <canvas baseChart [data]="barChartData" [type]="barChartType" class="chart-canvas"></canvas>
+                        <br>
+
+                        <canvas baseChart [data]="palabrasChartData" [type]="barChartType"
+                            class="chart-canvas"></canvas>
+                        <br>
+
+                        <canvas baseChart [data]="chatsActivosChartData" [type]="barChartType"
+                            class="chart-canvas"></canvas>
+                        <br>
+                        <canvas baseChart [data]="evolucionMensajesChartData" [type]="barChartType"
+                            [options]="{ responsive: true }">
+                        </canvas>
+                        <br>
+                        <canvas baseChart [data]="mensajesPorDiaSemanaChartData" [type]="barChartType"
+                            [options]="{ responsive: true }">
+                        </canvas>
+
                     </div>
                 </div>
 
@@ -86,7 +89,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Reportes -->
                 <div *ngSwitchCase="'reportes'">

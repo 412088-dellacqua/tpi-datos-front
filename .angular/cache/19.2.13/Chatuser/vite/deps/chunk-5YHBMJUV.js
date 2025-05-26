@@ -3248,6 +3248,29 @@ function take(count2) {
   });
 }
 
+// node_modules/rxjs/dist/esm5/internal/operators/distinctUntilChanged.js
+function distinctUntilChanged(comparator, keySelector) {
+  if (keySelector === void 0) {
+    keySelector = identity;
+  }
+  comparator = comparator !== null && comparator !== void 0 ? comparator : defaultCompare;
+  return operate(function(source, subscriber) {
+    var previousKey;
+    var first2 = true;
+    source.subscribe(createOperatorSubscriber(subscriber, function(value) {
+      var currentKey = keySelector(value);
+      if (first2 || !comparator(previousKey, currentKey)) {
+        first2 = false;
+        previousKey = currentKey;
+        subscriber.next(value);
+      }
+    }));
+  });
+}
+function defaultCompare(a, b) {
+  return a === b;
+}
+
 // node_modules/rxjs/dist/esm5/internal/operators/throwIfEmpty.js
 function throwIfEmpty(errorFactory) {
   if (errorFactory === void 0) {
@@ -29454,6 +29477,7 @@ export {
   concatMap,
   defaultIfEmpty,
   take,
+  distinctUntilChanged,
   finalize,
   first,
   takeLast,
@@ -30002,4 +30026,4 @@ export {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
-//# sourceMappingURL=chunk-RYIYISG3.js.map
+//# sourceMappingURL=chunk-5YHBMJUV.js.map
