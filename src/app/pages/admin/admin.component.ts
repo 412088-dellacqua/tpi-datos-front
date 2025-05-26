@@ -4,6 +4,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -97,8 +98,15 @@ export class AdminComponent {
     datasets: []
   };
 
-
+  constructor(private router: Router) {}
+  
   ngOnInit() {
+    const admin = localStorage.getItem('admin');
+
+    if(admin == null){
+       this.router.navigate(['/login']);
+    }
+
     this.cargarUsuariosPorMes();
     this.cargarPalabrasMasUsadas();
     this.cargarChatsMasActivos();
