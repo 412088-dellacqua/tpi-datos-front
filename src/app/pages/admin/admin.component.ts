@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { ChartData, ChartType } from 'chart.js';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, NgChartsModule],
+  imports: [CommonModule, HttpClientModule, NgChartsModule, FormsModule],
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
@@ -23,9 +25,9 @@ export class AdminComponent {
   barChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
-      { 
-        data: [], 
-        label: 'Usuarios registrados', 
+      {
+        data: [],
+        label: 'Usuarios registrados',
         backgroundColor: 'rgba(54, 162, 235, 0.7)',
         borderColor: 'rgba(54, 162, 235, 1)',
         borderWidth: 1
@@ -37,9 +39,9 @@ export class AdminComponent {
   palabrasChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
-      { 
-        data: [], 
-        label: 'Palabras más usadas', 
+      {
+        data: [],
+        label: 'Palabras más usadas',
         backgroundColor: 'rgba(255, 159, 64, 0.7)',
         borderColor: 'rgba(255, 159, 64, 1)',
         borderWidth: 1
@@ -51,9 +53,9 @@ export class AdminComponent {
   chatsActivosChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
-      { 
-        data: [], 
-        label: 'Chats más activos', 
+      {
+        data: [],
+        label: 'Chats más activos',
         backgroundColor: 'rgba(75, 192, 192, 0.7)',
         borderColor: 'rgba(75, 192, 192, 1)',
         borderWidth: 1
@@ -65,9 +67,9 @@ export class AdminComponent {
   evolucionMensajesChartData: ChartData<'bar'> = {
     labels: [],
     datasets: [
-      { 
-        data: [], 
-        label: 'Evolución de mensajes', 
+      {
+        data: [],
+        label: 'Evolución de mensajes',
         backgroundColor: 'rgba(153, 102, 255, 0.7)',
         borderColor: 'rgba(153, 102, 255, 1)',
         borderWidth: 1
@@ -88,7 +90,13 @@ export class AdminComponent {
       }
     ]
   };
-  
+
+  customQuery: string = '';
+  consultaChartData: ChartData<'bar'> = {
+    labels: [],
+    datasets: []
+  };
+
 
   ngOnInit() {
     this.cargarUsuariosPorMes();
@@ -212,5 +220,42 @@ export class AdminComponent {
       },
       error: (err) => console.error('Error al obtener mensajes por día de la semana', err)
     });
+  }
+
+  ejecutarConsulta() {
+    try {
+      const parsedQuery = JSON.parse(this.customQuery); // Validamos que sea JSON válido
+
+      this.http.post<any[]>('http://localhost:3000/api/messages/execute-aggregate', {
+        collection: 'users',
+        query: parsedQuery
+      }).subscribe({
+        next: (data) => {
+          // Si devuelve algo tipo { _id: { year, month }, totalUsers }
+          this.consultaChartData = {
+            labels: data.map(item => {
+              if (item._id?.year && item._id?.month) {
+                return `${item._id.month}/${item._id.year}`;
+              }
+              return JSON.stringify(item._id);
+            }),
+            datasets: [{
+              data: data.map(item => item.totalUsers || item.count || 0),
+              label: 'Resultado de consulta',
+              backgroundColor: 'rgba(100, 181, 246, 0.7)',
+              borderColor: 'rgba(100, 181, 246, 1)',
+              borderWidth: 1
+            }]
+          };
+        },
+        error: (err) => {
+          console.error('Error ejecutando consulta personalizada', err);
+          alert('Error en la consulta. Revisá que sea un JSON válido.');
+        }
+      });
+
+    } catch (err) {
+      alert("La consulta ingresada no es un JSON válido");
+    }
   }
 }

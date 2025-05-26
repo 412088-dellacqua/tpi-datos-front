@@ -19,9 +19,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" [class.active]="vistaActual === 'reportes'"
+                        <a class="nav-link text-white" [class.active]="vistaActual === 'Consulta personalizada'"
                             (click)="cambiarVista('reportes')">
-                            <i class="bi bi-bar-chart"></i> Reportes
+                            <i class="bi bi-bar-chart"></i> Consulta personalizada
                         </a>
                     </li>
                 </ul>
@@ -92,13 +92,22 @@
 
                 <!-- Reportes -->
                 <div *ngSwitchCase="'reportes'">
-                    <div class="list-group">
-                        <div class="list-group-item">📈 Ranking de usuarios por mensajes</div>
-                        <div class="list-group-item">💬 Chats más activos</div>
-                        <div class="list-group-item">📅 Mensajes por día</div>
-                        <div class="list-group-item">📝 Mensajes largos vs cortos</div>
-                        <div class="list-group-item">🧠 Otros insights</div>
+                    <div class="container my-4">
+
+                        <div class="mb-3">
+                            <textarea [(ngModel)]="customQuery" rows="10" class="form-control"
+                                placeholder="Pegá tu consulta Mongo aquí en formato JSON..."></textarea>
+                        </div>
+                        <button (click)="ejecutarConsulta()" class="btn btn-primary">
+                            Ejecutar consulta
+                        </button>
+
+                        <!-- Gráfico de resultado de la consulta -->
+                        <div class="mt-4" style="max-width: 600px;">
+                            <canvas baseChart [data]="consultaChartData" [type]="barChartType"></canvas>
+                        </div>
                     </div>
+
                 </div>
 
             </div>
