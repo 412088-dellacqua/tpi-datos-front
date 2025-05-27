@@ -1,4 +1,49 @@
-.bg-gradient {
+.bg-login-gradient {
   background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
   color: #fff;
 }
+
+.card {
+  animation: fadeInUp 0.5s ease-out;
+  background: #fff;
+  color: #333;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 2rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Nueva clase para íconos */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.85rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6c757d;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.input-with-icon {
+  padding-left: 2.25rem !important;
+}
+
+.form-floating > label {
+  left: 1.5rem;
+}
+

@@ -99,12 +99,12 @@ export class AdminComponent {
   };
 
   constructor(private router: Router) {}
-  
+
   ngOnInit() {
     const admin = localStorage.getItem('admin');
 
     if(admin == null){
-       this.router.navigate(['/login']);
+      this.router.navigate(['/login']);
     }
 
     this.cargarUsuariosPorMes();

@@ -1,28 +1,42 @@
+<!-- Bootstrap Icons en tu index.html (si aún no lo hiciste) -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"> -->
+
 <div class="min-vh-100 d-flex justify-content-center align-items-center bg-login-gradient px-3">
-  <div class="card shadow-lg p-4 w-100 animate__animated animate__fadeIn"
-    style="max-width: 400px; border-radius: 2rem;">
-    <div class="text-center mb-4">
-      <img src="https://cdn-icons-png.flaticon.com/512/766/766026.png" alt="Logo" width="80" class="mb-3" />
-      <h2 class="text-primary fw-bold">Bienvenido a CHATUP</h2>
-      <p class="text-muted">Inicia sesión para continuar</p>
+    <div class="card shadow-lg p-4 w-100 animate__animated animate__fadeIn animate__faster"
+         style="max-width: 400px; border-radius: 2rem;">
+
+        <div class="text-center mb-4">
+            <img src="https://cdn-icons-png.flaticon.com/512/766/766026.png" alt="Logo" width="80" class="mb-3" />
+            <h2 class="text-primary fw-bold">Bienvenido a CHATUP</h2>
+            <p class="text-muted">Nos alegra verte de nuevo 😊</p>
+        </div>
+
+        <form (ngSubmit)="login()" #formulario="ngForm">
+            <!-- Campo Correo -->
+            <div class="form-floating mb-3 position-relative">
+                <input type="email" id="usuario" class="form-control rounded-pill input-with-icon" placeholder="Usuario"
+                       name="email" [(ngModel)]="email" required>
+                <label for="usuario">Correo</label>
+                <i class="bi bi-envelope-fill input-icon"></i>
+            </div>
+
+            <!-- Campo Contraseña -->
+            <div class="form-floating mb-4 position-relative">
+                <input type="password" id="clave" class="form-control rounded-pill input-with-icon" placeholder="Contraseña"
+                       name="password" [(ngModel)]="password" required>
+                <label for="clave">Contraseña</label>
+                <i class="bi bi-lock-fill input-icon"></i>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-semibold">
+                Entrar
+            </button>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">¿No tienes cuenta?
+                    <a class="text-decoration-none text-primary fw-bold" (click)="register()">Regístrate</a>
+                </small>
+            </div>
+        </form>
     </div>
-    <form (ngSubmit)="login()" #formulario="ngForm">
-      <div class="form-floating mb-3">
-        <input type="email" id="usuario" class="form-control rounded-pill" placeholder="Usuario" name="email"
-          [(ngModel)]="email" required>
-        <label for="usuario">Correo</label>
-      </div>
-      <div class="form-floating mb-4">
-        <input type="password" id="clave" class="form-control rounded-pill" placeholder="Contraseña" name="password"
-          [(ngModel)]="password" required>
-        <label for="clave">Contraseña</label>
-      </div>
-      <button type="submit" class="btn btn-primary w-100 rounded-pill py-2 fw-semibold">Entrar</button>
-      <div class="text-center mt-3">
-        <small class="text-muted">¿No tienes cuenta?
-          <a class="text-decoration-none text-primary fw-bold" (click)="register()">Regístrate</a>
-        </small>
-      </div>
-    </form>
-  </div>
 </div>
