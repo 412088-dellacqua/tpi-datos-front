@@ -114,6 +114,7 @@ export class ChatComponent implements OnDestroy, AfterViewInit  {
 
     this.chatService.sendMessage(chatId, texto, usuario._id).subscribe();
     this.nuevoMensaje.set('');
+    
   }
 
   volver() {
