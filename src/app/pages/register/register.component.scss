@@ -1,4 +1,35 @@
+/* Fondo con degradado */
 .bg-gradient {
   background: linear-gradient(135deg, #4f46e5, #3b82f6);
   color: #fff;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* Estilo para la tarjeta */
+.card {
+  background: rgba(255, 255, 255, 0.95); /* translúcido */
+  backdrop-filter: blur(8px);
+  border-radius: 2rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Botón primario consistente */
+.btn-primary {
+  background: linear-gradient(45deg, #4f46e5, #3b82f6);
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(45deg, #3b82f6, #4f46e5);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: scale(1.03);
+  }
+}
+
+/* Estilo para los inputs redondeados */
+.form-control {
+  border-radius: 2rem;
+  padding-left: 1.25rem;
 }
