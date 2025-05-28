@@ -64,6 +64,9 @@ export class ChatComponent implements OnDestroy, AfterViewInit  {
         if (mensaje.chatId === chatId) {
           this.mensajes.update(msgs => [...msgs, mensaje]);
         }
+        setTimeout(()=>{
+          this.scrollToLastChild();
+        }, 30)
       });
     }
   }
