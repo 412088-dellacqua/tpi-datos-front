@@ -1,4 +1,67 @@
-.bg-gradient {
+/* Fondo con degradado */
+.bg-register-gradient {
   background: linear-gradient(135deg, #4f46e5, #3b82f6);
   color: #fff;
+  min-height: 100vh;
+  width: 100%;
 }
+
+/* Tarjeta con efecto vidrio y sombra */
+.card{
+  animation: fadeInUp 0.5s ease-out;
+  background: #fff;
+  color: #333;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  border-radius: 2rem;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Inputs redondeados */
+.form-control {
+  border-radius: 2rem;
+  padding-left: 2.25rem !important; /* espacio para el icono */
+}
+
+/* Íconos dentro del input */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.85rem;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6c757d;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.input-with-icon {
+  padding-left: 2.25rem !important;
+}
+
+/* Botón primario animado */
+.btn-primary {
+  background: linear-gradient(45deg, #4f46e5, #3b82f6);
+  border: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: linear-gradient(45deg, #3b82f6, #4f46e5);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+    transform: scale(1.03);
+  }
+}
+
+/* Floating labels mejor posicionadas */
+.form-floating > label {
+  left: 1.5rem;
+}
+

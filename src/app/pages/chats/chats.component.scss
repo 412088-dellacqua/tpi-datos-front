@@ -1,8 +1,78 @@
-.contenedor{
-    background-image: url('./../../assets/fondo.jpg'); // ruta relativa
-    background-size: cover;        // ajusta para que cubra todo el contenedor
-    background-position: center;   // centra la imagen
-    background-repeat: no-repeat;  // evita que se repita
+// Fondo del contenedor con capa blanca translúcida
+.contenedor {
+    /* Fondo con imagen + overlay negro translúcido */
+    background-image:
+            linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+            url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     background-attachment: fixed;
-    height: 100vh;                 // opcional: ocupa toda la pantalla
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1rem;
+    color: #fff; /* Para textos en caso de que quieras sobre fondo oscuro */
+}
+
+
+// Cards de chat con hover moderno
+.chat-item {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.95);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h6 {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    p {
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin-top: 4px;
+    }
+}
+/*
+.chat-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #eee;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.1);
+  }
+}
+
+
+*/
+// Header estilizado
+.bg-primary {
+    background: linear-gradient(90deg, #4f46e5, #3b82f6);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+.bg-primary h5 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    margin-bottom: 0 !important;
+}
+
+.bg-primary img {
+    margin-bottom: 0 !important;
+}
+
+// Logout con efecto hover
+.bg-primary div:hover img {
+    filter: brightness(85%);
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: all 0.2s ease-in-out;
 }
