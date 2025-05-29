@@ -20,6 +20,9 @@
             <p class="mb-0 text-muted text-truncate" style="max-width: 230px">{{ chat.ultimoMensaje }}</p>
           </div>
         </div>
+          <button class="btn btn-primary d-flex justify-content-center align-items-center boton-eliminar" style="width: 40px; height: 40px;">
+              <i class="bi bi-trash" style="font-size: 24px; margin-left: auto;" (click)="eliminarChat(chat.id);  $event.stopPropagation()"></i>
+          </button>
       </div>
     }
   </div>

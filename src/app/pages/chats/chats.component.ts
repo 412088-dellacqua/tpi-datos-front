@@ -68,6 +68,22 @@ export class ChatsComponent {
     this.router.navigate(['/chat', chatId]);
   }
 
+  eliminarChat(chatId: string): void {
+
+     console.log('Chat a eliminar:', chatId + " de chat component"); // 👉 verificar el ID
+  if (confirm('¿Estás seguro de que querés eliminar este chat?')) {
+    this.chatService.deleteChat(chatId).subscribe({
+      next: () => {
+        this.chats = this.chats.filter(c => c.id !== chatId);
+        console.log("delete chatservice dentro de eliminarchats")
+      },
+      error: err => {
+        console.error('Error al eliminar el chat:', err);
+      }
+    });
+  }
+}
+
   cerrarSession(): void {
     localStorage.removeItem('usuario');
     this.router.navigate(['/login']);
