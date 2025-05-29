@@ -39,6 +39,12 @@ export class ChatService {
     return this.http.get<Chat>(`${this.apiUrl}chats/chat/${chatId}`);
   }
 
+  deleteChat(chatId: string): Observable<any[]> {
+    console.log(chatId+ " delete de chat.service");
+  return this.http.delete<any[]>(`${this.apiUrl}chats/${chatId}`);
+}
+
+
   // Obtener los mensajes de un chat
   getMessages(chatId: string): Observable<Mensaje[]> {
     return this.http.get<Mensaje[]>(`${this.apiUrl}messages/${chatId}`);
